@@ -29,12 +29,16 @@ public class MisoShadow
         AnimatorController Con = MisoUtils.ModifyAndSaveController(Avatar, SavedClip, AngleClip, StrengthClip, NewGuid);
         MisoUtils.AddMAObject(Avatar, Con);
 
+        //確認が面倒なので場合は下記のSetAnchorOverrideのみコメント解除して、34~39行目をコメントアウト
+        // SetAnchorOverride(Avatar);
         bool result = EditorUtility.DisplayDialog("Question", "Do you want to reassign all of your Material's Root Bones and Anchor Overrides to Chest Bone?", "Yes", "No");
         if (result)
         {
             SetAnchorOverride(Avatar);
         }
         EditorUtility.DisplayDialog("Success", "Miso Shadow Apply Complete", "OK");
+
+
     }
 
     [MenuItem(COLOR_PICKER_PATH, false, 11)]

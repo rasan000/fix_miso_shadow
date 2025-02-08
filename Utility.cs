@@ -361,8 +361,16 @@ namespace Miso.Utility
 
         public static AnimatorController ModifyAndSaveController(GameObject Avatar, AnimationClip SavedClip, AnimationClip AngleClip, AnimationClip StrengthClip, Guid GUID)
         {
+                        
             AnimatorController OriCon = AssetDatabase.LoadAssetAtPath<AnimatorController>(SHADOW_CONTROLLER);
-            AnimatorController NewCon = UnityEngine.Object.Instantiate(OriCon);
+            
+            string NewConPath = CREATE_PATH + Avatar.name + "_" + GUID + "/ShadowController_" + Avatar.name + ".controller";
+            if (AssetDatabase.LoadAssetAtPath<AnimatorController>(NewConPath) != null)
+            {
+                AssetDatabase.DeleteAsset(NewConPath);
+            }            
+            AssetDatabase.CopyAsset(AssetDatabase.GetAssetPath(OriCon), NewConPath);
+            AnimatorController NewCon = AssetDatabase.LoadAssetAtPath<AnimatorController>(NewConPath);
 
             AnimatorControllerLayer StrLayer = NewCon.layers[0];  // Assuming the ShadowStrength layer is at index 1
             foreach (ChildAnimatorState childState in StrLayer.stateMachine.states)
@@ -391,12 +399,6 @@ namespace Miso.Utility
                 }
             }
 
-            string NewConPath = CREATE_PATH + Avatar.name + "_" + GUID + "/ShadowController_" + Avatar.name + ".controller";
-            if (AssetDatabase.LoadAssetAtPath<AnimatorController>(NewConPath) != null)
-            {
-                AssetDatabase.DeleteAsset(NewConPath);
-            }
-            AssetDatabase.CreateAsset(NewCon, NewConPath);
             AssetDatabase.SaveAssets();
 
             return NewCon;
